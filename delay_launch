@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# This script is called by .conf/lxsession/LXDE-pi/autostart
+# The sleep is included to allow enough time for the
+# desktop background to be loaded before the program starts
+
+sleep 3
+xdg-open Desktop/pool_dashboard.desktop

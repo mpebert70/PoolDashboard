@@ -1,0 +1,5 @@
+after looking at the diffs...
+
+copy config.txt.backup to /boot/config.txt
+
+copy autostart.backup to ~/.config/lxsession/LXDE-pi/autostart

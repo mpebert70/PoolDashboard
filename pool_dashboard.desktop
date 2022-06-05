@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Dashboard
+Comment=This is my comment
+Exec=/home/pi/programs/pool_dashboard/pool_dashboard.py --fullscreen
+Icon=/home/pi/programs/pool_dashboard/images/pool_icon_1.png
+Path=/home/pi/programs/pool_dashboard
+Terminal=true
+Type=Application
+Categories=Utility;Application;
