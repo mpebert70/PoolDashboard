@@ -20,7 +20,7 @@ communicate important status information to members.  The information includes:
 
 The Greenbriar Pool Club has a maximum facility load of 248 people. This
 limit is set by the [Water Recreation Facilities Ordinance of Fairfax
-County, Virginia](http://www.fairfaxcounty.gov/hd/eh/pools/fairfax-county-water-rec-facilities-ordinance.pdf).  According to the ordinance,
+County, Virginia](https://www.fairfaxcounty.gov/health/sites/health/files/assets/documents/pdf/water-recreation-facilities-ordinance.pdf).  According to the ordinance,
 
     "The maximum individual swimming pool bather load shall be determined
     by dividing the total water surface area in square feet of each swimming
