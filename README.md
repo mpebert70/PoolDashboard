@@ -329,10 +329,13 @@ the configuration file changes required to auto launch the application.
 
 The scripts/email_logs.sh script can be used with a cronjob
 to have the Raspberry Pi email a plot of the Facility Load at the
-end of the day as well as the log files.  See the next section for information about configuring The Raspberry Pi to send emails.  The plot is created using gnuplot and the /scripts/load.plt file.  The email addresses are defined by
-the PLOT_EMAILS and LOG_EMAILS environment variables in the /etc/profile.d/pool_dashboard.sh file.  The email addresses should be
-delimited by a semi-colon.
------------------------------------------------------------------------
+end of the day as well as the log files.  See the next section for
+information about configuring The Raspberry Pi to send emails. The
+plot is created using gnuplot and the /scripts/load.plt file. The email
+addresses are defined by the PLOT_EMAILS and LOG_EMAILS environment
+variables in the /etc/profile.d/pool_dashboard.sh file.  The email
+addresses should be delimited by a semi-colon.
+
 
 ## Raspberry Pi Configuration ##
 
