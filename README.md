@@ -5,13 +5,13 @@ communicate important status information to members.  The information includes:
 
 * The current facility load - the current facility load is displayed using
   a progress bar widget, both on a monitor at the entrance
-  to the club and on the club's website.
+  to the club and on a website linked to from the club's website.
 * The most recent water quality test results - water quality data
   for both the main and wading pool are displayed on the monitor at
   the entrance to the Club.
 * Unanticipated closures of either or both pools - unanticipated closures
   are communicated to the membership by sending out tweets
-  and updating the status on the Club's website.
+  and updating the status on a website linked to from the club's website.
 
 
 -----------------------------------------------------------------------
