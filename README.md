@@ -286,15 +286,15 @@ configure how an application appears in a menu with an icon.  The contents
 of the "pool_dashboard.desktop" file is provided below.
 
     [Desktop Entry]
-    Version=1.0
+    Version=1.5
     Name=Dashboard
     Comment=This is my comment
-    Exec=/home/pi/programs/pool_dashboard/pool_dashboard.py --fullscreen
+    Exec=bash -c "source /home/pi/Python-Venvs/default-3.11/bin/activate; /home/pi/programs/pool_dashboard/pool_dashboard.py --fullscreen"
     Icon=/home/pi/programs/pool_dashboard/images/pool_icon_1.png
     Path=/home/pi/programs/pool_dashboard
-    Terminal=true
+    Terminal=false
     Type=Application
-    Categories=Utility;Application;
+    Categories=Utility
 
 The command used to execute the program, including any desired commandline
 options, is assigned to the "Exec" key.  The absolute path to the desired
@@ -311,17 +311,18 @@ This file is a simple bash script with the following contents.
 
     #!/bin/bash
     
-    # This script is called by .conf/lxsession/LXDE-pi/autostart
-    # The sleep is included to allow enough time for the
-    # desktop background to be loaded before the program starts
+    # This script is called by ~/.conf/labwc/autostart
+    # The sleep was originally included to allow enough time for the
+    # desktop background to be loaded before the program starts.
+    # It might not be needed any longer.
     
     sleep 3
-    xdg-open Desktop/pool_dashboard.desktop
+    gio launch /home/pi/Desktop/pool_dashboard.desktop
 
-As indicated in the comments, the sleep command is needed to allow
+As indicated in the comments, the sleep command was originally needed to allow
 enough time for the desktop background to be loaded before the application
-starts.  The xdg-open command is used to open/run the desktop entry file
-as if a user had double-clicked on the icon.
+starts. It might not be needed any longer. The "gio launch" command is used
+to open/run the desktop entry file as if a user had double-clicked on the icon.
 
 See the the section on Raspberry Pi Configuration for information on
 the configuration file changes required to auto launch the application.

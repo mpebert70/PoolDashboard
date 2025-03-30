@@ -1,8 +1,9 @@
 #!/bin/bash
 
-# This script is called by .conf/lxsession/LXDE-pi/autostart
-# The sleep is included to allow enough time for the
-# desktop background to be loaded before the program starts
+# This script is called by ~/.conf/labwc/autostart
+# The sleep was originally included to allow enough time for the
+# desktop background to be loaded before the program starts.
+# It might not be needed any longer.
 
 sleep 3
-xdg-open Desktop/pool_dashboard.desktop
+gio launch /home/pi/Desktop/pool_dashboard.desktop
