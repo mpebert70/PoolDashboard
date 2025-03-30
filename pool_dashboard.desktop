@@ -1,10 +1,10 @@
 [Desktop Entry]
-Version=1.0
+Version=1.5
 Name=Dashboard
 Comment=This is my comment
-Exec=/home/pi/programs/pool_dashboard/pool_dashboard.py --fullscreen
+Exec=bash -c "source /home/pi/Python-Venvs/default-3.11/bin/activate; /home/pi/programs/pool_dashboard/pool_dashboard.py --fullscreen"
 Icon=/home/pi/programs/pool_dashboard/images/pool_icon_1.png
 Path=/home/pi/programs/pool_dashboard
 Terminal=true
 Type=Application
-Categories=Utility;Application;
+Categories=Utility
