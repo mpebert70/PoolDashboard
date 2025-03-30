@@ -83,7 +83,7 @@ the program press the Esc key.
 ### Facility Load ###
 
 The front desk staff authenticates members using
-[Club Sentry](http://www.clubsentry.com/index.php). Club Sentry
+[Member Splash](https://membersplash.com/). Member Splash
 maintains a database of members with photographs of each family member
 associated with a membership.  As people are admitted, the front desk
 staff will add to the counter in Greenbriar Pool Club Dashboard and as
@@ -246,6 +246,8 @@ twitter account using the [Twitter Application Management](https://apps.twitter.
 
 DWEET_THING_NAME can be any string, but you should try and make it unique
 with respect to other "things" dweeting data to [dweet.io](https://dweet.io).
+The name we are using is "gbpool-rpi". The data can be viewed at
+[http://dweet.io/follow/gbpool-rpi](http://dweet.io/follow/gbpool-rpi).
 
 A [Dark Sky](https:/darksky.net) account should be created using the gmail address
 associated with the Raspberry Pi.  Once the Dark Sky account is established you will

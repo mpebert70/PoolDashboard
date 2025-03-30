@@ -365,12 +365,20 @@ class StatusDialog(Dialog):
             self.reason_list.grid()
             self.reopen_label.grid()
             self.reopen_time_frame.grid()
+            self.reason_selected(event)
         self.status_list.selection_clear()
 
     def reason_selected(self, event):
         if self.reason_list.current() == 0:  # Thunder/Lightning
             self.status_list.current(1)  # set closed
-        if self.reason_list.current() == 4:  # closed for the night
+            thirty_minutes_from_now = datetime.now() + timedelta(minutes=30)
+            self.reopen_hour_sv.set(thirty_minutes_from_now.strftime('%I'))
+            self.reopen_min_sv.set(thirty_minutes_from_now.strftime('%M'))
+            if 'PM' == thirty_minutes_from_now.strftime('%p'):
+                self.reopen_am_pm.current(1)  # set PM
+            else:
+                self.reopen_am_pm.current(0)  # set AM
+        elif self.reason_list.current() == 4:  # closed for the night
             self.status_list.current(1)  # set closed
             if self.twitter_enabled:
                 self.tweet_checkbutton.deselect()  # uncheck send tweet
@@ -747,9 +755,16 @@ class MainWindow(object):
         # acceptable levels table
         self.acceptable_levels_table(x_pos=0.53, y_pos=0.625)
 
+        # weather
+        self.conditions_text = self.canvas.create_text(int(round(0.5*self.screen_w)),
+                                int(round(0.885*self.screen_h)),
+                                text="weather conditions",
+                                font="Verdana %s bold" % (int(round(0.025*self.screen_h))),
+                                fill="sea green")
+
         # clock
         self.clock = self.canvas.create_text(int(round(0.5*self.screen_w)),
-                                int(round(0.915*self.screen_h)),
+                                int(round(0.93*self.screen_h)),
                                 text="??:?? ?M",
                                 font="Verdana %s bold" % (int(round(0.038*self.screen_h))),
                                 fill="sea green")
@@ -791,16 +806,17 @@ class MainWindow(object):
         self.update_clock()
 
         try:
-            self.darksky_dev_key = os.environ["DARKSKY_DEV_KEY"]
+            self.open_weather_api_key = os.environ["OPEN_WEATHER_API_KEY"]
             self.location = os.environ["LAT_LON_POOL"]
-        except:
-            self.darksky_dev_key = None
+            self.lat = self.location.split(',')[0]
+            self.lon = self.location.split(',')[1]
+        except KeyError:
+            self.open_weather_api_key = None
             self.location = None
 
-        if self.darksky_dev_key and self.location:
+        if self.open_weather_api_key and self.location:
             self.update_weather()
             self.consume_weather()
-
 
     def consume_weather(self):
         try:
@@ -827,34 +843,37 @@ class MainWindow(object):
         except:
             pass
 
+        self.canvas.itemconfig(self.conditions_text,
+                               text=u"feels like {}\N{DEGREE SIGN}F - {}".format(self.feelslike, self.conditions))
+
         # call this method again in 10 seconds
         refresh_period_sec = 10  # seconds
         refresh_period_ms = int(refresh_period_sec * 1000)   # milliseconds
         self.master.after(refresh_period_ms, self.consume_weather)
 
 
-    def call_darksky(self, q):
-        url = "https://api.darksky.net/forecast/{0}/{1}".format(self.darksky_dev_key, self.location)
+    def call_open_weather(self, q):
+        url = "https://api.openweathermap.org/data/3.0/onecall?units=imperial&lat={0}&lon={1}&appid={2}".format(self.lat, self.lon, self.open_weather_api_key)
         headers = {"Accept-Encoding" : "gzip"}
 
         try:
-            darksky_result = requests.get(url, headers=headers).json()
+            open_weather_dict = requests.get(url, headers=headers).json()
         except (requests.RequestException, ValueError, requests.HTTPError) as e:
             pass
         else:
             result = {}
-            result["temp_f"] = int(round(float(darksky_result["currently"]["temperature"])))
-            result["feelslike"] = int(round(float(darksky_result["currently"]["apparentTemperature"])))
-            result["conditions"] = darksky_result["currently"]["summary"]
-            result["sunrise"] = time.localtime(int(darksky_result["daily"]["data"][0]["sunriseTime"]))
-            result["sunset"] = time.localtime(int(darksky_result["daily"]["data"][0]["sunsetTime"]))
+            result["temp_f"] = round(open_weather_dict['current']['temp'])
+            result["feelslike"] = round(open_weather_dict['current']['feels_like'])
+            result["conditions"] = open_weather_dict['current']['weather'][0]['description']
+            result["sunrise"] = time.localtime(open_weather_dict['daily'][0]['sunrise'])
+            result["sunset"] = time.localtime(open_weather_dict['daily'][0]['sunset'])
             q.put(result)
         sys.exit()
 
 
     def update_weather(self):
 
-        p = Process(name="weather", target=self.call_darksky, args=(self.q,))
+        p = Process(name="weather", target=self.call_open_weather, args=(self.q,))
         p.daemon = True
         p.start()
         # call this method again in 5 minutes
@@ -1578,7 +1597,8 @@ class MainWindow(object):
                    "date_updated":date_updated,
                    "time_updated":time_updated,
                    "status":self.status_text,
-                   "reopon_time":self.reopen_time_text}
+                   "reopon_time":self.reopen_time_text,
+                   "water_temp":self.main_temp_text}
         p1 = Process(name="dweet", target=self.dweet, args=(payload,))
         p1.daemon = True
         p1.start()
