@@ -5,5 +5,5 @@
 # desktop background to be loaded before the program starts.
 # It might not be needed any longer.
 
-sleep 3
+sleep 5
 gio launch /home/pi/Desktop/pool_dashboard.desktop
