@@ -1592,7 +1592,7 @@ class MainWindow(object):
 
         date_updated=datetime.now().strftime("%a,%d %b")
         time_updated=datetime.now().strftime("%I:%M:%S %p").lstrip("0")
-
+        '''
         payload = {"count":str(self.count),
                    "date_updated":date_updated,
                    "time_updated":time_updated,
@@ -1600,11 +1600,23 @@ class MainWindow(object):
                    "reopon_time":self.reopen_time_text,
                    "water_temp":self.main_temp_text}
         p1 = Process(name="dweet", target=self.dweet, args=(payload,))
+        '''
+        if self.reopen_time_text == "":
+            reopen_time_text = "--:--"
+        else:
+            reopen_time_text = self.reopen_time_text
+
+        time_date_updated = f'{time_updated} ({date_updated})'
+        aio_payload = {'feeds': [{'key': 'count', 'value': self.count},
+                                 {'key': 'status', 'value': self.status_text},
+                                 {'key': 'reopen-time', 'value': reopen_time_text},
+                                 {'key': 'time-updated', 'value': time_date_updated}]}
+        p1 = Process(name="adafruit_io", target=self.adafruit_io, args=(aio_payload,))
         p1.daemon = True
         p1.start()
 
-        # call this method again in 2 seconds
-        self.master.after(2*1000, self.push_count)
+        # call this method again in 8 seconds
+        self.master.after(8*1000, self.push_count)
 
     def dweet(self, payload):
         # dweet.io
@@ -1619,6 +1631,21 @@ class MainWindow(object):
             pass
         sys.exit()
 
+    def adafruit_io(self, payload):
+        try:
+            aio_username = os.environ['IO_USERNAME']
+            aio_key = os.environ['IO_KEY']
+        except KeyError:
+            return
+        group_name = 'pooldata'
+        url = f'https://io.adafruit.com/api/v2/{aio_username}/groups/{group_name}/data'
+        headers = {'X-AIO-KEY': aio_key, 'content-Type': 'application/json'}
+        try:
+            response = requests.post(url, headers=headers, json=payload)
+        except:
+            pass
+        sys.exit()
+ 
 
 def main():
     log_dir = os.path.expanduser("~/logs/")
